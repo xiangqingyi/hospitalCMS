@@ -91,7 +91,7 @@ exports.list = function (req, res) {
     query.exec(function (err, results) {
       //console.log(err, results);
       res.render('server/user/list', {
-        title: 'User List',
+        title: '用户列表',
         users: results,
         pageInfo: pageInfo,
         Menu: 'list'
@@ -216,7 +216,7 @@ exports.register = function (req, res) {
   }
 };
 
-exports.add = function (req, res) {
+exports.add = async function (req, res) {
   let method = req.method;
   if (method === 'GET') {
     res.render('server/user/add', {
@@ -224,10 +224,18 @@ exports.add = function (req, res) {
     });
   } else if (method === 'POST') {
     //let obj = req.body;
-    let obj = _.pick(req.body, 'username', 'password', 'email', 'mobile', 'name', 'avatar', 'gender', 'birthday', 'description', 'address', 'position', 'questions');
+    let obj = _.pick(req.body, 'username', 'password', 'email', 'mobile', 'name', 'avatar', 'gender', 'birthday', 'description', 'address', 'position', 'questions', 'tel');
     console.log(obj);
-    Role.findOne({ status: 202 }, function (err, role) {
+    if(!(/^1(3|4|5|6|7|8|9)d{9}$/.test(obj.tel))){ 
+      return res.json({
+        status: false,
+        message: "手机号格式错误"
+      })
+  } 
+
+    Role.findOne({ status: 202 },async  function (err, role) {
       console.log('role', role);
+
       if (err || !role) {
         return res.render('server/info', {
           message: 'Failure, role not exist:' + config.admin.role.user
@@ -238,6 +246,13 @@ exports.add = function (req, res) {
         obj.author = req.session.user._id;
       }
       let user = new User(obj);
+      let jUser = await User.findOne({username: obj.username});
+      if (jUser) {
+        return res.json({
+          status: false,
+          message: "用户名已存在"
+        })
+      }
       user.save(function (err, result) {
         console.log(result);
         if (req.xhr) {

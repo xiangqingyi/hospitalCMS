@@ -2,32 +2,36 @@ extends ../layout
 
 block content
     .row
-        .col-md-6
+        .col-md-6(style="width:100%")
             .panel.panel-default
                 .panel-heading
-                    h3.panel-title Add
+                    h3.panel-title 新增用户
                 .panel-body
                     form.form-horizontal(role='form', action='', method='post')
                         .form-group
-                            label.col-sm-2.control-label(for='inputEmail2') Username
+                            label.col-sm-2.control-label(for='inputEmail2') 用户名
                             .col-sm-10
                                 input#inputEmail2.form-control(type='text', name='username', placeholder='')
                         .form-group
-                            label.col-sm-2.control-label(for='inputPassword3') Password
+                            label.col-sm-2.control-label(for='inputPassword3') 密码
                             .col-sm-10
                                 input#inputPassword3.form-control(type='password', name='password', placeholder='')
                         .form-group
-                            label.col-sm-2.control-label(for='inputPassword4') Name
+                            label.col-sm-2.control-label(for='inputPassword4') 姓名
                             .col-sm-10
                                 input#inputPassword4.form-control(type='text', name='name', placeholder='')
                         .form-group
-                            label.col-sm-2.control-label(for='inputPassword5') Email
+                            label.col-sm-2.control-label(for='inputPassword5') 邮箱
                             .col-sm-10
                                 input#inputPassword5.form-control(type='email', name='email', placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword6') 电话
+                            .col-sm-10
+                                input#inputPassword6.form-control(type='number', name='tel', placeholder='')
                         input(type='hidden', name='_csrf', value='#{token}')
                         .form-group
-                            .col-sm-offset-2.col-sm-10
-                                button.btn.btn-primary(type='submit') Submit
+                            .col-sm-offset-2.col-sm-10(style="width:100%;  margin-left:0;text-align:center;")
+                                button.btn.btn-primary(type='submit') 提交
 
 block foot-js
     script.
@@ -40,6 +44,8 @@ block foot-js
             $('form').ajaxForm({
                 beforeSerialize: function() {
                     console.log('beforeSerialize')
+                    const tel  = $('#inputPassword6').text()
+
                 },
                 beforeSubmit: function() {
                     console.log('beforeSubmit')
@@ -57,13 +63,14 @@ block foot-js
                         $form[0].reset();
                     } else {
                         messenger.update({
-                            message: 'Failure',
+                            message: data.message,
                             hideAfter: 3,
                             type: 'success'
                         });
                     }
                 },
-                err: function() {
+                err: function(res) {
+                    console.log(res);
                     console.log('error')
                     messenger.update({
                         message: 'System Error',

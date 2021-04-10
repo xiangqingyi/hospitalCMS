@@ -28,7 +28,7 @@ exports.list = function (req, res) {
     query.exec(function (err, results) {
       //console.log(err, results);
       res.render('server/content/list', {
-        title: 'Content List',
+        title: '用户列表',
         contents: results,
         pageInfo: pageInfo,
         Menu: 'list'

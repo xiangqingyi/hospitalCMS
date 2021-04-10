@@ -97,11 +97,11 @@ html.no-js
                             li.sub-menu(class=Path === 'user' ? 'active' : '')
                                 a(href='javascript:void(0);')
                                     i.fa.fa-users
-                                    span 患者个人信息管理
+                                    span 系统用户管理
                                     i.arrow.fa.fa-angle-right.pull-right
                                 ul
                                     li(class=Menu === 'list' ? 'active' : '')
-                                        a(href='#{adminDir}/user') 患者列表
+                                        a(href='#{adminDir}/user') 用户列表
                                     li(class=Menu === 'add' ? 'active' : '')
                                         a(href='#{adminDir}/user/add') 新增
                         if (User && (User.status === 101 || Actions.indexOf('ROLE_INDEX') > -1))
@@ -115,44 +115,44 @@ html.no-js
                                         a(href='#{adminDir}/role') 医生列表
                                     li(class=Menu === 'add' ? 'active' : '')
                                         a(href='#{adminDir}/role/add') 新增
-                        //- if (User && (User.status === 101 || Actions.indexOf('FILE_INDEX') > -1))
-                        //-     li.sub-menu(class=Path === 'file' ? 'active' : '')
-                        //-         a(href='javascript:void(0);')
-                        //-             i.fa.fa-folder-open
-                        //-             span File
-                        //-             i.arrow.fa.fa-angle-right.pull-right
-                        //-         ul
-                        //-             li(class=Menu === 'list' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/file') List
-                        //-             li(class=Menu === 'add' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/file/add') Add
-                        //- if (User && User.status === 101 || Actions.indexOf('NOTIFICATION_INDEX') > -1)
-                        //-     li.sub-menu(class=Path === 'notification' ? 'active' : '')
-                        //-         a(href='javascript:void(0);')
-                        //-             i.fa.fa-envelope
-                        //-             span Notification
-                        //-             i.arrow.fa.fa-angle-right.pull-right
-                        //-         ul
-                        //-             li(class=Menu === 'list' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/notification') All
-                        //-             li(class=Menu === 'received' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/notification/received') Received
-                        //-             li(class=Menu === 'sent' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/notification/sent') Sent
-                        //- if (User && User.status === 101 || Actions.indexOf('MESSAGE_INDEX') > -1)
-                        //-     li(class=Menu === 'list' ? 'active' : '')
-                        //-         a(href='#{adminDir}/message') Message
-                        //- if (User && User.status === 101 || Actions.indexOf('TAG_INDEX') > -1)
-                        //-     li.sub-menu(class=Path === 'tag' ? 'active' : '')
-                        //-         a(href='javascript:void(0);')
-                        //-             i.fa.fa-tags
-                        //-             span Tag
-                        //-             i.arrow.fa.fa-angle-right.pull-right
-                        //-         ul
-                        //-             li(class=Menu === 'list' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/tag') List
-                        //-             li(class=Menu === 'add' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/tag/add') Add
+                        if (User && (User.status === 101 || Actions.indexOf('FILE_INDEX') > -1))
+                            li.sub-menu(class=Path === 'file' ? 'active' : '')
+                                a(href='javascript:void(0);')
+                                    i.fa.fa-folder-open
+                                    span File
+                                    i.arrow.fa.fa-angle-right.pull-right
+                                ul
+                                    li(class=Menu === 'list' ? 'active' : '')
+                                        a(href='#{adminDir}/file') List
+                                    li(class=Menu === 'add' ? 'active' : '')
+                                        a(href='#{adminDir}/file/add') Add
+                        if (User && User.status === 101 || Actions.indexOf('NOTIFICATION_INDEX') > -1)
+                            li.sub-menu(class=Path === 'notification' ? 'active' : '')
+                                a(href='javascript:void(0);')
+                                    i.fa.fa-envelope
+                                    span Notification
+                                    i.arrow.fa.fa-angle-right.pull-right
+                                ul
+                                    li(class=Menu === 'list' ? 'active' : '')
+                                        a(href='#{adminDir}/notification') All
+                                    li(class=Menu === 'received' ? 'active' : '')
+                                        a(href='#{adminDir}/notification/received') Received
+                                    li(class=Menu === 'sent' ? 'active' : '')
+                                        a(href='#{adminDir}/notification/sent') Sent
+                        if (User && User.status === 101 || Actions.indexOf('MESSAGE_INDEX') > -1)
+                            li(class=Menu === 'list' ? 'active' : '')
+                                a(href='#{adminDir}/message') Message
+                        if (User && User.status === 101 || Actions.indexOf('TAG_INDEX') > -1)
+                            li.sub-menu(class=Path === 'tag' ? 'active' : '')
+                                a(href='javascript:void(0);')
+                                    i.fa.fa-tags
+                                    span Tag
+                                    i.arrow.fa.fa-angle-right.pull-right
+                                ul
+                                    li(class=Menu === 'list' ? 'active' : '')
+                                        a(href='#{adminDir}/tag') List
+                                    li(class=Menu === 'add' ? 'active' : '')
+                                        a(href='#{adminDir}/tag/add') Add
                         if (User && User.status === 101 || Actions.indexOf('LOG_INDEX') > -1)
                             li.sub-menu(class=Path === 'log' ? 'active' : '')
                                 a(href='#{adminDir}/log')
