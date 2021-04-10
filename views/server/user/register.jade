@@ -1,0 +1,28 @@
+extends ../layout-blank
+
+block content
+    section#login-container
+        .row
+            #login-wrapper.col-md-3
+                .panel.panel-primary
+                    .panel-heading
+                        h3.panel-title
+                            | Register
+                    .panel-body
+                        p
+                            | Already member? 
+                            a(href='pages-login.html')
+                                strong Login
+                        form(role='form', action='', method='post')
+                            .form-group
+                                label(for='J_username') *Username
+                                input#J_username.form-control(type='text', name='username', placeholder='', autofocus)
+                            .form-group
+                                label(for='J_password') *Password
+                                input#J_password.form-control(type='password', name='password', placeholder='')
+                            .form-group
+                                label(for='J_email') *Email
+                                input#J_email.form-control(type='email', name='email', placeholder='')
+                            input(type='hidden', name='_csrf', value='#{token}')
+                            button.btn.btn-primary.btn-block(type='submit') Submit
+

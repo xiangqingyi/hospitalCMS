@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                p Name：#{role.name}
+                p Author: 
+                    if (role.author)
+                        | #{role.author.username}
+                    else
+                        | Empty
+                p Actions：
+                    - each action in role.actions
+                        span.label.label-info
+                            | #{action}
+                        | 
+                pDate：#{role.created}
+                p Description：!{role.description}

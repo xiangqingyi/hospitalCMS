@@ -1,0 +1,70 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            a.btn.btn-info(href='#{adminDir}/category/add') Add
+            table.table.table-striped
+                thead
+                    tr
+                        th Name
+                        th Flag
+                        th Author
+                        th Date
+                        th Operation
+                tbody
+                    - each category in categorys
+                        tr
+                            td
+                                a(href='#{adminDir}/category/#{category.id}') #{category.name}
+                            td
+                                | #{category.flag}
+                            td
+                                if (category.author)
+                                    | #{category.author.name}
+                            td
+                                | #{moment(category.created).format('LLL')}
+                            td
+                                a.btn.btn-default.btn-xs(href='#{adminDir}/category/#{category.id}/edit') edit
+                                | &nbsp;
+                                a.btn.btn-danger.btn-xs.J_del(href='#{adminDir}/category/#{category.id}/del') delete
+            if (pageInfo && pageInfo.totalPage > 1)
+                - pageInfo.query = query
+                include ../mixin
+                +pagination(pageInfo)
+block foot-js
+    script.
+        var token = '#{token}';
+        Messenger.options = {
+            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+            theme: 'flat'
+        };
+        $(function() {
+            $(document).on('click', '.J_del', function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                var url = $this.attr('href');
+                var messenger = Messenger().post("Processing...");
+                $.post(url, {_csrf: token}, function(res) {
+                    console.log(res);
+                    var status = res.status;
+                    if (status) {
+                        messenger.update({
+                            message: 'Success',
+                            hideAfter: 3,
+                            type: 'success'
+                        });
+                        setTimeout(function() {
+                            $this.closest('tr').remove();
+                        }, 1000)
+                        
+                    } else {
+                        messenger.update({
+                            message: 'Failure',
+                            hideAfter: 3,
+                            type: 'error'
+                        });
+                    }
+                })
+            })
+        })

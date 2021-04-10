@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                p Name：#{role.name}
+                p Author: 
+                    if (role.author)
+                        | #{role.author.username}
+                    else
+                        | Empty
+                pDate：#{role.created}
+                p Description：!{role.description}

@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                p Name：#{category.name}
+                p Flag：#{category.flag}
+                p Parent：#{category.parent.name}
+                pDate：#{category.created}
+                p Description：!{category.description}

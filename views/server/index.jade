@@ -1,0 +1,61 @@
+extends layout
+
+block content
+    .console
+        h3 Hi，#{User.name}
+    .row
+        .col-md-3.col-sm-6
+            a(href="#{adminDir}/content/")
+                .dashboard-tile.detail.tile-turquoise
+                    .content
+                        h1.text-left.timer(data-from='0', data-to='180', data-speed='2500') #{data.content}
+                        p Content
+                    .icon
+                        i.fa.fa-folder
+        .col-md-3.col-sm-6
+            a(href="#{adminDir}/category/")
+                .dashboard-tile.detail.tile-red
+                    .content
+                        h1.text-left.timer(data-from='0', data-to='180', data-speed='2500') #{data.category}
+                        p Category
+                    .icon
+                        i.fa.fa-sitemap
+        .col-md-3.col-sm-6
+            a(href="#{adminDir}/comment/")
+                .dashboard-tile.detail.tile-blue
+                    .content
+                        h1.text-left.timer(data-from='0', data-to='180', data-speed='2500') #{data.comment}
+                        p Comment
+                    .icon
+                        i.fa.fa-comments
+        .col-md-3.col-sm-6
+            a(href="#{adminDir}/user/")
+                .dashboard-tile.detail.tile-turquoise
+                    .content
+                        h1.text-left.timer(data-from='0', data-to='56', data-speed='2500') #{data.user}
+                        p User
+                    .icon
+                        i.fa.fa-users
+        .col-md-3.col-sm-6
+            a(href="#{adminDir}/role/")
+                .dashboard-tile.detail.tile-blue
+                    .content
+                        h1.text-left.timer(data-from='0', data-to='32', data-speed='2500') #{data.role}
+                        p Role
+                    .icon
+                        i.fa.fa.fa-key
+
+        .col-md-3.col-sm-6
+            a(href="#{adminDir}/file/")
+                .dashboard-tile.detail.tile-purple
+                    .content
+                        h1.text-left.timer(data-to='105', data-speed='2500') #{data.file}
+                        p File
+                    .icon
+                        i.fa.fa-file
+    
+
+block foot-js
+    script.
+
+                

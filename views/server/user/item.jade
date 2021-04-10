@@ -1,0 +1,62 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .panel.panel-default
+                .panel-heading
+                    | User Info
+                .panel-body
+                    .form-horizontal
+                        .form-group
+                            label.col-sm-2.control-label ID
+                            .col-sm-10 
+                                p.form-control-static #{user.id}
+                        .form-group
+                            label.col-sm-2.control-label Name
+                            .col-sm-10 
+                                p.form-control-static #{user.name}
+                        .form-group
+                            label.col-sm-2.control-label Username
+                            .col-sm-10 
+                                p.form-control-static #{user.username}
+                        .form-group
+                            label.col-sm-2.control-label Email
+                            .col-sm-10 
+                                p.form-control-static #{user.email}
+                        .form-group
+                            label.col-sm-2.control-label Mobile
+                            .col-sm-10 
+                                p.form-control-static #{user.mobile || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-label Gender
+                            .col-sm-10 
+                                p.form-control-static #{user.gender || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-labelRole
+                            .col-sm-10 
+                                p.form-control-static
+                                    if (user.roles)
+                                        - each role in user.roles
+                                            span.label.label-info(data-href='#{adminDir}/role/#{role._id}')
+                                                | #{role.name}
+                        .form-group
+                            label.col-sm-2.control-label Author
+                            .col-sm-10 
+                                p.form-control-static
+                                    if (user.author)
+                                        | #{user.author.username}
+                                    else
+                                        | Empty
+                        .form-group
+                            label.col-sm-2.control-label Register Date
+                            .col-sm-10
+                                p.form-control-static #{moment(user.created).format('LLL')}
+                        .form-group
+                            label.col-sm-2.control-label Last Login
+                            .col-sm-10
+                                p.form-control-static #{moment(user.last_login_date).format('LLL')}
+                        .form-group
+                            label.col-sm-2.control-label Last Login IP
+                            .col-sm-10
+                                p.form-control-static #{user.last_login_ip}

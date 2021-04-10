@@ -1,0 +1,14 @@
+node_modules/
+bower_components/
+
+.DS_Store
+*.log
+
+public/uploaded/
+
+public/build/
+
+/config.js
+_tools/
+
+client/

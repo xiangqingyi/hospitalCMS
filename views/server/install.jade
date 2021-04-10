@@ -1,0 +1,27 @@
+extends layout-blank
+
+block content
+    section#login-container
+        .row
+            #login-wrapper.col-md-3
+                .panel.panel-primary
+                    .panel-heading
+                        h3.panel-title
+                            | Initialization
+                    .panel-body
+                        form(role='form', action='#{adminDir}/install', method='post')
+                            .form-group
+                                label(for='exampleInputEmail1') Admin Username
+                                input#exampleInputEmail1.form-control(type='text', name='username', placeholder='', autofocus)
+                            .form-group
+                                label(for='exampleInputPassword1') Password
+                                input#exampleInputPassword1.form-control(type='password', name='password', placeholder='')
+                            .form-group
+                                label(for='exampleInputName1') Name
+                                input#exampleInputName1.form-control(type='text', name='name', placeholder='')
+                            .form-group
+                                label(for='exampleInputEmail1') Email
+                                input#exampleInputEmail1.form-control(type='email', name='email', placeholder='')
+                            input(type='hidden', name='_csrf', value='#{token}')
+                            button.btn.btn-primary.btn-block(type='submit') Submit
+

@@ -1,0 +1,68 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            a.btn.btn-info(href='#{adminDir}/tag/add') Add
+            table.table.table-striped
+                thead
+                    tr
+                        th Name
+                        th Author
+                        th Date
+                        th Operation
+                tbody
+                    - each tag in tags
+                        tr
+                            td
+                                a(href='#{adminDir}/tag/#{tag.id}') #{tag.name}
+                            td
+                                if (tag.author)
+                                    | #{tag.author.name}
+                            td
+                                | #{moment(tag.created).format('LLL')}
+                            td
+                                a.btn.btn-default.btn-xs(href='#{adminDir}/tag/#{tag.id}/edit') edit
+                                | &nbsp;
+                                a.btn.btn-danger.btn-xs.J_del(href='#{adminDir}/tag/#{tag.id}/del') delete
+            if (pageInfo && pageInfo.totalPage > 1)
+                - pageInfo.query = query
+                include ../mixin
+                +pagination(pageInfo)
+
+block foot-js
+    script.
+        var token = '#{token}';
+        Messenger.options = {
+            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+            theme: 'flat'
+        };
+        $(function() {
+            $(document).on('click', '.J_del', function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                var url = $this.attr('href');
+                var messenger = Messenger().post("Processing...");
+                $.post(url, {_csrf: token}, function(res) {
+                    console.log(res);
+                    var status = res.status;
+                    if (status) {
+                        messenger.update({
+                            message: 'Success',
+                            hideAfter: 3,
+                            type: 'success'
+                        });
+                        setTimeout(function() {
+                            $this.closest('tr').remove();
+                        }, 1000)
+                        
+                    } else {
+                        messenger.update({
+                            message: 'Failure',
+                            hideAfter: 3,
+                            type: 'error'
+                        });
+                    }
+                })
+            })
+        })

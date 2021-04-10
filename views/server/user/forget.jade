@@ -1,0 +1,44 @@
+extends ../layout-blank
+
+block content
+    section#login-container
+            .row
+                #login-wrapper.col-md-3
+                    if (type && type === 'set')
+                        .panel.panel-primary
+                            .panel-heading
+                                h3.panel-title
+                                    | Reset Password
+                            .panel-body
+                                p #{user.username}
+                                form.form-horizontal(role='form', action='', method='post')
+                                    .form-group
+                                        .col-md-12
+                                            input#email.form-control(type='password', name='password', placeholder='please input new password', autofocus)
+                                            i.fa.fa-user
+                                    .form-group
+                                        .col-md-12
+                                            input#password.form-control(type='password', name='repassword', placeholder='confirm password')
+                                            i.fa.fa-lock
+                                    .form-group
+                                        .col-md-12
+                                            input(type='hidden', name='hash', value='#{hash}')
+                                            input(type='hidden', name='_csrf', value='#{token}')
+                                            button.btn.btn-primary.btn-block(type='submit') Submit
+                    else
+                        .panel.panel-primary
+                            .panel-heading
+                                h3.panel-title
+                                    | Forgot Password
+                            .panel-body
+                                p  please input your username
+                                form.form-horizontal(role='form', action='', method='post')
+                                    .form-group
+                                        .col-md-12
+                                            input#email.form-control(type='text', name='username', placeholder='', autofocus)
+                                            i.fa.fa-user
+                                    .form-group
+                                        .col-md-12
+                                            input(type='hidden', name='_csrf', value='#{token}')
+                                            button.btn.btn-primary.btn-block(type='submit') Submit
+

@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                p Content：#{notification.content}
+                p From：#{notification.from}
+                p To：#{notification.to}
+                p Read：#{notification.read}
+                p Unread：#{notification.unread}
+                p Date：#{notification.created}

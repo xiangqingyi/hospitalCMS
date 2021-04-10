@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .panel.panel-default
+                .panel-heading
+                    h3.panel-title Edit Profile
+                .panel-body
+                    form.form-horizontal(role='form', action='#{adminDir}/me/edit', method='post')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword4') Name
+                            .col-sm-10
+                                input#inputPassword4.form-control(type='text', name='name', value='#{user.name}', placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword6') Mobile
+                            .col-sm-10
+                                input#inputPassword6.form-control(type='mobile', name='mobile', value='#{user.mobile || ""}' placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='J_birthday') Birthday
+                            .col-sm-10
+                                input#J_birthday.form-control(type='text', name='birthday', value='#{moment(user.birthday || "").format("YYYY-MM-DD")}' placeholder='')
+
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword5') Gender
+                            .col-sm-10
+                                select.form-control.input-sm(name='gender')
+                                    if (user.gender === 'secret')
+                                        option(value='secret', selected) secret
+                                    else 
+                                        option(value='secret') secret
+                                    if (user.gender === 'male')
+                                        option(value='male', selected) male
+                                    else 
+                                        option(value='male') male
+
+                                    if (user.gender === 'female')
+                                        option(value='female', selected) female
+                                    else 
+                                        option(value='female') female
+                        input(type='hidden', name='_csrf', value='#{token}')
+                        .form-group
+                            .col-sm-offset-2.col-sm-10
+                                button.btn.btn-primary(type='submit') Submit
+
+                    
+
+                    
+

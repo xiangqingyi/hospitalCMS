@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                p Content：#{comment.content}
+                p From：
+                    if (comment.from)
+                        a(href='#{adminDir}/content/#{comment.from.id}') #{comment.from.title}
+                pDate：#{comment.created}
+                p Author：
+                    if (comment.author)
+                        | #{comment.author.name}
+                    else
+                        | Anonymous

@@ -1,0 +1,82 @@
+doctype html
+html
+    head
+        title #{title}
+        meta(name="viewport",content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0")
+        link(rel='stylesheet', href='//cdn.jsdelivr.net/semantic-ui/2.2.9/semantic.min.css')
+        link(rel='stylesheet', href='/assets/app/css/style.css')
+        block head-css
+        block head-js
+    body
+        .ui.large.top.fixed.menu.transition.hidden
+            .ui.container
+                a.item(class=!Path ? 'active' : '',href='/') Home
+                a.item(class=Path === 'contact' ? 'active' : '',href='/contact') Message
+                .right.menu
+                    if (User)
+                        a.item(href='#{adminDir}')
+                            | #{User.name}
+                        a.item(href='#{adminDir}/user/logout') Logout
+                    else
+                        .item
+                            a.ui.button(href='#{adminDir}/user/login') Login
+                        .item
+                            a.ui.primary.button(href='#{adminDir}/user/register') Register
+        .pusher
+            .ui.inverted.vertical.masthead.center.aligned.segment
+                .ui.container
+                    .ui.large.secondary.inverted.pointing.menu
+                        a.item(class=!Path ? 'active' : '',href='/') Home
+                        a.item(class=Path === 'contact' ? 'active' : '',href='/contact') Message
+                        .right.item
+                            if (User)
+                                a.item(href='#{adminDir}') #{User.name}
+                                a.item(href='#{adminDir}/user/logout') Logout
+                            else
+                                a(href='#{adminDir}/user/login', style='margin-right: 16px;') Login
+                                a(href='#{adminDir}/user/register') Register
+            
+        .page
+            block content
+        .ui.inverted.vertical.footer.segment
+            .ui.container
+                .ui.stackable.inverted.divided.equal.height.grid
+                    //.three.wide.column
+                        h4.ui.inverted.header about
+                        .ui.interved.link.list
+                            a.item
+                            a.item
+                    //.three.wide.column
+                        h4.ui.inverted.header
+                        .ui.interved.link.list
+                            a.item
+                            a.item
+                    .ten.wide.column
+                        h3.ui.inverted.large.header wenglou
+                        p Cms system based on node
+                        a.item(target='_blank', href='https://github.com/wengqianshan/cms') github
+        script(src='//cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js')
+        script(src='//cdn.jsdelivr.net/semantic-ui/2.2.9/semantic.min.js')
+        script(src='//cdn.jsdelivr.net/mustache.js/2.3.0/mustache.min.js')
+        script(src='//cdn.jsdelivr.net/momentjs/2.18.1/moment-with-locales.min.js')
+        block foot-js
+        script.
+            $('.masthead')
+                .visibility({
+                    once: false,
+                    onBottomPassed: function() {
+                        $('.fixed.menu').transition('fade in');
+                    },
+                    onBottomPassedReverse: function() {
+                        $('.fixed.menu').transition('fade out');
+                    }
+                })
+        if (env !== 'development')
+            if (config.ga)
+                script.
+                    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                    ga('create', '#{config.ga}', 'auto');
+                    ga('send', 'pageview');

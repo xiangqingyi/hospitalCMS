@@ -1,0 +1,32 @@
+extends layout
+block head-css
+    style.
+        .form-control{
+            max-width: 500px;
+        }
+
+block content
+    .ui.body
+        .ui.container
+            form.ui.form(action='', method='POST', role='form')
+                .four.wide.field
+                    label(for='') Name
+                    input(type='text', placeholder='please input your name', name='name')
+                .four.wide.field
+                    label(for='') Email
+                    input(type='text', placeholder='please input your email', name='email')
+                .field
+                    label(for='') Content
+                    textarea(placeholder='please leave a message', name='content', rows='5')
+                    input(type='hidden', name='_csrf', value='#{token}')
+                .inline.field
+                    button.ui.primary.button(type='submit') Submit 
+            
+            
+block foot-js
+    script.
+        var token = '#{token}';
+        
+        
+        
+                

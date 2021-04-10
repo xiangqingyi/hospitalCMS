@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                p Content：#{message.content}
+                p Date：#{message.created}
+                p Author：
+                    if (message.name)
+                        | #{message.name}
+                    else
+                        | Anonymous
