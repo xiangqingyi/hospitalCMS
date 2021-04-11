@@ -104,6 +104,17 @@ html.no-js
                                         a(href='#{adminDir}/user') 用户列表
                                     li(class=Menu === 'add' ? 'active' : '')
                                         a(href='#{adminDir}/user/add') 新增
+                        if (User && (User.status === 101 || Actions.indexOf('USER_INDEX') > -1))
+                            li.sub-menu(class=Path === 'user' ? 'active' : '')
+                                a(href='javascript:void(0);')
+                                    i.fa.fa-users
+                                    span 医生信息管理
+                                    i.arrow.fa.fa-angle-right.pull-right
+                                ul
+                                    li(class=Menu === 'list' ? 'active' : '')
+                                        a(href='#{adminDir}/user') 医生列表
+                                    li(class=Menu === 'add' ? 'active' : '')
+                                        a(href='#{adminDir}/user/add') 新增
                         if (User && (User.status === 101 || Actions.indexOf('ROLE_INDEX') > -1))
                             li.sub-menu(class=Path === 'role' ? 'active' : '')
                                 a(href='javascript:void(0);')
