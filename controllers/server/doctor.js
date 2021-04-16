@@ -71,58 +71,81 @@ exports.authenticate = function (req, res, next) {
   }
 };
 
-exports.list = function (req, res) {
-  let condition = {};
-  const isAdmin = req.isAdmin;
-  if (!isAdmin) {
-    condition.author = req.session.user._id;
-  }
-  User.count(condition, function (err, total) {
-    let query = User.find(condition).populate('author').populate('roles');
-    let pageInfo = util.createPage(req.query.page, total);
-    query.skip(pageInfo.start);
-    query.limit(pageInfo.pageSize);
-    query.sort({ created: -1 });
-    query.exec(function (err, results) {
-      //console.log(err, results);
-      res.render('server/user/list', {
-        title: '用户列表',
-        users: results,
+
+/**
+ * 医生列表
+ * 医生数量
+ *  */  
+exports.list = async function (req, res) {
+    let condition = {}
+    const isAdmin = req.isAdmin
+    if (!isAdmin) {
+        condition.author = req.session.user._id
+    }
+    const doctorRole = await Role.findOne({name: "Doctor"})
+    const results = await User.find(condition).populate('author').populate('roles')
+    var arr = []
+    if (results && results.length != 0) {
+        results.map((item, index) => {
+            if (item.roles[0].id == doctorRole.id) {
+                arr.push(item)
+            }
+        })
+    }
+    const pageInfo = util.createPage(req.query.page, arr.length)
+    // arr.sort({created: -1}).limit(pageInfo.pageSize).skip(pageInfo.start)
+    return res.render('server/doctor/list', {
+        title: '医生列表',
+        doctors: arr,
         pageInfo: pageInfo,
         Menu: 'list'
-      });
-    });
-  })
+    })
 }
 
-exports.one = function (req, res) {
-  let id = req.params.id;
-  User.findById(id).populate('author').populate('roles').exec(function (err, result) {
-    res.render('server/user/item', {
-      user: result
-    });
-  });
-};
-
-exports.query = function (req, res) {
-  let kw = req.query.q;
-  User.find({ name: new RegExp(kw, 'gi') }).exec(function (err, result) {
-    console.log(err, result)
-    let data = result.map(function (item) {
-      return _.pick(item, '_id', 'name')
+/**
+ * 医生个人信息
+*/
+exports.one = async function (req, res) {
+    let id = req.params.id
+    const results = await Doctor.findById(id).populate('author').populate('roles')
+    return res.render('server/doctor/item', {
+        doctor: results
     })
-    if (err) {
-      return res.json({
-        status: false,
-        message: 'Failure'
-      });
+}
+
+/**
+ * 关联信息查询
+ * name
+*/
+exports.query = async function (req, res) {
+    try {
+        let kw = req.query.q;
+        const doctors = await Doctor.find({name: new RegExp(kw, 'gi')})
+        if (doctor) {
+            let data = doctors.map(function(item) {
+                return _.pick(item, '_id', 'name')
+            }) 
+            return res.json({
+                status: true,
+                items: data
+            })
+        } else {
+            return res.json({
+                status: false,
+                message: '找不到医生信息'
+            })
+        }  
+    } catch (error) {
+        console.log('查找医生个人信息失败')
+        console.log(error)
+        return res.render('server/info', {
+            message: "查找医生个人信息失败"
+        })
     }
-    return res.json({
-      status: true,
-      items: data
-    });
-  });
-};
+
+}
+
+
 
 exports.register = function (req, res) {
   let ip = util.getIp(req);
@@ -214,21 +237,21 @@ exports.register = function (req, res) {
 exports.add = async function (req, res) {
   let method = req.method;
   if (method === 'GET') {
-    res.render('server/user/add', {
+    res.render('server/doctor/add', {
       Menu: 'add'
     });
   } else if (method === 'POST') {
     //let obj = req.body;
     let obj = _.pick(req.body, 'username', 'password', 'email', 'mobile', 'name', 'avatar', 'gender', 'birthday', 'description', 'address', 'position', 'questions', 'tel');
     console.log(obj);
-    if(!(/^1(3|4|5|6|7|8|9)d{9}$/.test(obj.tel))){ 
-      return res.json({
-        status: false,
-        message: "手机号格式错误"
-      })
-  } 
+    // if(!(/^[1][3,4,5,7,8][0-9]{9}$/.test(obj.tel))){ 
+    //   return res.json({
+    //     status: false,
+    //     message: "手机号格式错误"
+    //   })
+//   } 
 
-    Role.findOne({ status: 202 },async  function (err, role) {
+    Role.findOne({ name: "Doctor" },async  function (err, role) {
       console.log('role', role);
 
       if (err || !role) {
@@ -252,196 +275,162 @@ exports.add = async function (req, res) {
         console.log(result);
         if (req.xhr) {
           return res.json({
-            status: !err
+            status: !err,
+            message: "新增医生失败"
           })
         }
         if (err) {
           console.log(err);
           return res.render('server/info', {
-            message: 'Failure'
+            message: '新增失败',
+            status: false
           });
         }
         res.render('server/info', {
-          message: 'Success'
+          message: '新增成功',
+          status: true
         });
       });
     });
   }
 };
 
-exports.edit = function (req, res) {
-  let id = req.params.id;
-  let editHandler = function (user) {
-    user.save(function (err, user) {
-      if (req.xhr) {
-        return res.json({
-          status: !err
-        })
-      }
-      if (err || !user) {
-        console.log(err);
-        return res.render('server/info', {
-          message: 'Failure'
-        });
-      }
-      if (id === req.session.user._id) {
-        req.session.user = user;
-        res.locals.User = user;
-      }
-      res.render('server/info', {
-        message: 'Success'
-      });
-    })
-  };
-  if (req.method === 'GET') {
-    User.findById(id).populate('author').exec(function (err, result) {
-      if (err || !result) {
-        return res.render('server/info', {
-          message: 'System Error'
-        });
-      }
-      let isAdmin = req.isAdmin;
-      let isAuthor = result.author && ((result.author._id + '') === req.session.user._id);
+/**
+ * 编辑医生的个人信息
+ * */ 
+exports.edit = async function (req, res) {
+    let id = req.params.id
+    const doctor = await User.findById(id).populate('author')
+    const isAuthor = doctor.author && ((doctor.author._id + '') === req.session.user._id)
+    const isAdmin = req.isAdmin
 
-      if (!isAdmin && !isAuthor) {
-        return res.render('server/info', {
-          message: 'no permission'
-        });
-      }
-      try {
-        let condition = {};
-        const isAdmin = req.isAdmin;
-        if (!isAdmin) {
-          condition.author = req.session.user._id;
-        }
-        Role.find(condition, function (err, results) {
-          if (!err && results) {
-            res.render('server/user/edit', {
-              user: result,
-              roles: results
-            });
-          }
-        })
-      } catch (e) {
-        res.render('server/user/edit', {
-          user: result
-        });
-      }
-    })
-  } else if (req.method === 'POST') {
-    //let obj = req.body;
-    let obj = _.pick(req.body, 'username', 'email', 'mobile', 'name', 'avatar', 'gender', 'birthday', 'description', 'address', 'position', 'questions', 'roles');
-    // check permission
-    User.findById(id).populate('roles').populate('author').exec(function (err, user) {
-      let isAdmin = req.isAdmin;
-      let isAuthor = user.author && ((user.author._id + '') === req.session.user._id);
-      let isMine = (user._id + '') === (req.user._id + '')
-      // check roole
-      const roles = req.Roles;
-      const inputRoles = _.difference(obj.roles, roles);
-      const overAuth = inputRoles.length > 0;
+    if (req.method == "GET") {
+        try {
+            if (!isAdmin && !isAuthor) {
+                return res.render('server/info', {
+                    message: '无权限操作'
+                })
+            }
+            let condition = {}
+            if (!isAdmin) { // 不是管理员是本人
+                condition.author = req.session.user._id
+            }
+            const roles = await Role.find(condition)
+            return res.render('server/doctor/edit', {
+                doctor: doctor,
+                roles: roles
+            })
 
-      if (!isAdmin && !isAuthor && !isMine) {
-        return res.render('server/info', {
-          message: 'No permission'
-        });
-      }
-      if (!isAdmin && overAuth) {
-        return res.render('server/info', {
-          message: 'No permission'
-        });
-      }
-      let query;
-      if (typeof obj.roles === 'string') {
-        query = Role.find({ _id: obj.roles });
-      } else if (typeof obj.roles === 'object') {
-        query = Role.find({ _id: { $in: obj.roles } })
-      }
-      if (!query) {
-        return res.render('server/info', {
-          message: 'no role info'
-        });
-      }
-      query.exec(function (err, roles) {
-        // admin user
-        if (user.status === 101) {
-          // TODO: validation
-          let statuses = _.map(roles, 'status');
-          if (statuses.indexOf(201) === -1) {
+            
+        } catch (error) {
+            console.log(error)
             return res.render('server/info', {
-              message: 'admin user role incorrect'
-            });
-          }
+                message: '编辑医生个人信息失败'
+            })
         }
-        obj.roles = roles;
-        _.assign(user, obj);
-        editHandler(user);
-      });
-    });
-  }
-};
+    } else if (req.method == "POST") {
+        
+        // 判断是否有权限
+        let obj = _.pick(req.body, 'username', 'email', 'mobile', 'name', 'avatar', 'gender', 'birthday', 'description', 'address', 'position', 'questions', 'roles', 'physician');
 
-exports.del = function (req, res) {
-  let deleteHandle = function (user) {
-    user.remove(function (err) {
-      if (err) {
-        return res.render('server/info', {
-          message: 'Failure'
-        });
-      }
-      res.render('server/info', {
-        message: 'Success'
-      })
-    });
-  };
-  let id = req.params.id;
-  User.findById(id).populate('roles').populate('author').exec(function (err, result) {
-    if (!result) {
-      return res.render("server/info", {
-        message: "Not Exist",
-      });
-    }
-    let isAdmin = req.isAdmin;
-    let isAuthor = result.author && ((result.author._id + '') === req.session.user._id);
+        const isMine = doctor._id === req.user._id 
+        const roles = req.Roles
+        const inputRoles = _.difference(obj.roles, roles)
+        if (!isAdmin && !isAuthor && !isAuthor) {
+            return res.render('server/info', {
+                message: '没有权限'
+            })
+        }
+        if (!isAdmin && inputRoles.length > 0) {
+            return res.render('server/info', {
+                message: '没有权限'
+            })
+        }
+        let query
+        if (typeof obj.roles === 'string') {
+            query = await Role.find({_id: obj.roles})
+        } else if (typeof obj.roles === 'object') {
+            query = await Role.find({_id: {$in: obj.roles}})
+        }
+        if (!query) {
+            return res.render('server/info', {
+                message: '没有查到相关的角色'
+            })
+        }
+        // 管理员
+        if (doctor.status === 101) {
+            let statuses = _.map(roles, "status")
+            if (statuses.indexOf(201) === -1) {
+                return res.render('server/info', {
+                    message: '管理员角色不能修改'
+                })
+            }
+        }
+        obj.roles = roles
+        _.assign(doctor, obj)
 
-    if (!isAdmin && !isAuthor) {
-      return res.render('server/info', {
-        message: 'no permission'
-      });
+        try {
+            await doctor.save()
+            if (id === req.session.user._id) {
+                req.session.user = doctor
+                req.locals.User = doctor
+            }
+            return res.render('server/info', {
+                message: '修改医生个人信息成功'
+            })
+        } catch (error) {
+            console.log(error)
+            return res.render('server/info', {
+                message: '修改医生个人信息失败'
+            })
+        }
     }
-    //System default users cannot delete
-    if (result.status === 101) {
-      return res.render("server/info", {
-        message: "System default users cannot delete",
-      });
-    }
-
-    result.remove(function (err) {
-      if (req.xhr) {
-        return res.json({
-          status: !err
-        })
-      }
-      if (err) {
-        return res.render('server/info', {
-          message: 'Failure'
-        });
-      }
-      // kill oneself
-      if (id === req.session.user._id) {
-        req.session.destroy();
-        res.locals.User = null;
-        console.log('Success');
-        let path = util.translateAdminDir('');
-        return res.redirect(path);
-      }
-      res.render('server/info', {
-        message: 'Success'
-      })
-    });
-  });
 }
 
+/**
+ * 删除指定的doctor信息，改变status，不显示
+ * */ 
+
+exports.del = async function (req, res) {
+    let id = req.params.id
+    let isAdmin = req.isAdmin
+    const doctor = await User.findById(id).populate('roles').populate('author')
+    if (!doctor) {
+        return res.render('server/info', {
+            message: "不存在这个医生"
+        })
+    }
+    const isAuthor = doctor.author && ((doctor.author._id + '') === req.session.user._id);
+    if (!isAdmin  && !isAuthor) {
+        return res.render('server/info', {
+            message: '没有权限'
+        })
+    }
+    if (doctor.status === 101) {
+        return res.render('server/info', {
+            message: "系统管理员，不能删除"
+        })
+    }
+    try {
+        await doctor.remove()
+        if (id === req.session.user._id) {
+            req.session.destroy()
+            res.locals.User = null
+            let path = util.translateAdminDir('')
+            return res.redirect(path)
+        }
+        return res.render('server/info', {
+            message: '删除信息成功'
+        })
+
+    } catch (error) {
+        console.log(error)
+        return res.render('server/info', {
+            message: '删除指定医生失败'
+        })
+        
+    }    
+}
 
 let noRedirect = [
   'user/login',

@@ -1,0 +1,82 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-6(style="width:100%")
+            .panel.panel-default
+                .panel-heading
+                    h3.panel-title 新增医生
+                .panel-body
+                    form.form-horizontal(role='form', action='', method='post')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputEmail2') 用户名
+                            .col-sm-10
+                                input#inputEmail2.form-control(type='text', name='username', placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword3') 密码
+                            .col-sm-10
+                                input#inputPassword3.form-control(type='password', name='password', placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword4') 姓名
+                            .col-sm-10
+                                input#inputPassword4.form-control(type='text', name='name', placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword5') 邮箱
+                            .col-sm-10
+                                input#inputPassword5.form-control(type='email', name='email', placeholder='')
+                        .form-group
+                            label.col-sm-2.control-label(for='inputPassword6') 电话
+                            .col-sm-10
+                                input#inputPassword6.form-control(type='number', name='tel', placeholder='')
+                        input(type='hidden', name='_csrf', value='#{token}')
+                        .form-group
+                            .col-sm-offset-2.col-sm-10(style="width:100%;  margin-left:0;text-align:center;")
+                                button.btn.btn-primary(type='submit') 提交
+
+block foot-js
+    script.
+        Messenger.options = {
+            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+            theme: 'flat'
+        };
+        $(function() {
+            var messenger;
+            $('form').ajaxForm({
+                beforeSerialize: function() {
+                    console.log('beforeSerialize')
+                    const tel  = $('#inputPassword6').text()
+
+                },
+                beforeSubmit: function() {
+                    console.log('beforeSubmit')
+                    messenger = Messenger().post("Processing...");
+                },
+                success: function(data, status, xhr, $form) {
+                    console.log(data)
+                    var status = data.status;
+                    if (status) {
+                        messenger.update({
+                            message: 'Success',
+                            hideAfter: 3,
+                            type: 'success'
+                        });
+                        $form[0].reset();
+                    } else {
+                        messenger.update({
+                            message: data.message,
+                            hideAfter: 3,
+                            type: 'success'
+                        });
+                    }
+                },
+                err: function(res) {
+                    console.log(res);
+                    console.log('error')
+                    messenger.update({
+                        message: 'System Error',
+                        hideAfter: 3,
+                        type: 'success'
+                    });
+                }
+            })
+        })

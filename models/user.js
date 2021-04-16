@@ -32,7 +32,7 @@ let UserSchema = new Schema({
 
   gender: {
     type: String,
-    enum: ['male', 'female', 'secret']
+    enum: ['男', '女', '保密']
   },
 
   birthday: {
@@ -48,7 +48,9 @@ let UserSchema = new Schema({
     type: String
   },
 
-
+  physician:{
+    type: String
+  }, 
 
   roles: [{
     type: Schema.ObjectId,

@@ -112,18 +112,18 @@ html.no-js
                                     i.arrow.fa.fa-angle-right.pull-right
                                 ul
                                     li(class=Menu === 'list' ? 'active' : '')
-                                        a(href='#{adminDir}/user') 医生列表
+                                        a(href='#{adminDir}/doctor') 医生列表
                                     li(class=Menu === 'add' ? 'active' : '')
-                                        a(href='#{adminDir}/user/add') 新增
+                                        a(href='#{adminDir}/doctor/add') 新增
                         if (User && (User.status === 101 || Actions.indexOf('ROLE_INDEX') > -1))
                             li.sub-menu(class=Path === 'role' ? 'active' : '')
                                 a(href='javascript:void(0);')
                                     i.fa.fa-unlock-alt
-                                    span 医生信息管理
+                                    span 系统角色
                                     i.arrow.fa.fa-angle-right.pull-right
                                 ul
                                     li(class=Menu === 'list' ? 'active' : '')
-                                        a(href='#{adminDir}/role') 医生列表
+                                        a(href='#{adminDir}/role') 角色列表
                                     li(class=Menu === 'add' ? 'active' : '')
                                         a(href='#{adminDir}/role/add') 新增
                         if (User && (User.status === 101 || Actions.indexOf('FILE_INDEX') > -1))
