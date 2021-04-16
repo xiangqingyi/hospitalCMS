@@ -273,23 +273,21 @@ exports.add = async function (req, res) {
       }
       user.save(function (err, result) {
         console.log(result);
-        if (req.xhr) {
-          return res.json({
-            status: !err,
-            message: "新增医生失败"
-          })
-        }
         if (err) {
           console.log(err);
-          return res.render('server/info', {
-            message: '新增失败',
-            status: false
-          });
+          return res.json({
+              status: false,
+              message: '新增失败'
+          })
         }
-        res.render('server/info', {
-          message: '新增成功',
-          status: true
-        });
+        // return res.render('server/info', {
+        //   message: '新增成功',
+        //   status: true
+        // });
+        return res.json({
+            status: true,
+            message: '新增成功'
+        })
       });
     });
   }

@@ -130,13 +130,13 @@ html.no-js
                             li.sub-menu(class=Path === 'file' ? 'active' : '')
                                 a(href='javascript:void(0);')
                                     i.fa.fa-folder-open
-                                    span File
+                                    span 患者资料
                                     i.arrow.fa.fa-angle-right.pull-right
                                 ul
                                     li(class=Menu === 'list' ? 'active' : '')
-                                        a(href='#{adminDir}/file') List
+                                        a(href='#{adminDir}/file') 资料列表
                                     li(class=Menu === 'add' ? 'active' : '')
-                                        a(href='#{adminDir}/file/add') Add
+                                        a(href='#{adminDir}/file/add') 新增
                         if (User && User.status === 101 || Actions.indexOf('NOTIFICATION_INDEX') > -1)
                             li.sub-menu(class=Path === 'notification' ? 'active' : '')
                                 a(href='javascript:void(0);')

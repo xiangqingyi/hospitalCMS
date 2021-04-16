@@ -11,6 +11,7 @@ block content
                             th 用户名
                             th 姓名
                             th 角色
+                            th 科室
                             th 创建人
                             th 日期
                             th 操作
@@ -26,6 +27,7 @@ block content
                                             span.label.label-info
                                                 | #{role.name}
                                             | 
+                                td #{user.address}
                                 td
                                     if (user.author)
                                         | #{user.author.username}
