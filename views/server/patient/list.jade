@@ -4,22 +4,22 @@ block content
     .row
         .col-md-12
             .lists
-                a.btn.btn-info(href='#{adminDir}/doctor/add') 新增
+                a.btn.btn-info(href='#{adminDir}/patient/add') 新增
                 table.table.table-striped
                     thead
                         tr
                             th 用户名
                             th 姓名
                             th 角色
-                            th 科室
+                            th 病例
                             th 创建人
                             th 日期
                             th 操作
                     tbody
-                        - each user in doctors
+                        - each user in patients
                             tr
                                 td 
-                                    a(href='#{adminDir}/doctor/#{user.id}', title='#{user.email}') #{user.username}
+                                    a(href='#{adminDir}/patient/#{user.id}', title='#{user.email}') #{user.username}
                                 td #{user.name}
                                 td
                                     if (user.roles)
@@ -27,7 +27,7 @@ block content
                                             span.label.label-info
                                                 | #{role.name}
                                             | 
-                                td #{user.address}
+                                td #{user.caseReport}
                                 td
                                     if (user.author)
                                         | #{user.author.username}
@@ -35,7 +35,7 @@ block content
                                         | Empty
                                 td #{moment(user.created).format('LLL')}
                                 td 
-                                    a.btn.btn-default.btn-xs(href='#{adminDir}/doctor/#{user.id}/edit') edit
+                                    a.btn.btn-default.btn-xs(href='#{adminDir}/patient/#{user.id}/edit') edit
                                     |  
                                     if (user.status !== 101)
                                         a.btn.btn-danger.btn-xs.J_del(href='#{adminDir}/user/#{user.id}/del') delete

@@ -1,0 +1,67 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .panel.panel-default
+                .panel-heading
+                    | 病人详情
+                .panel-body
+                    .form-horizontal
+                        .form-group
+                            label.col-sm-2.control-label 病人编号
+                            .col-sm-10 
+                                p.form-control-static #{patient.id}
+                        .form-group
+                            label.col-sm-2.control-label 姓名
+                            .col-sm-10 
+                                p.form-control-static #{patient.name}
+                        //- .form-group
+                        //-     label.col-sm-2.control-label Username
+                        //-     .col-sm-10 
+                        //-         p.form-control-static #{patient.username}
+                        .form-group
+                            label.col-sm-2.control-label 邮箱
+                            .col-sm-10 
+                                p.form-control-static #{patient.email}
+                        .form-group
+                            label.col-sm-2.control-label 手机
+                            .col-sm-10 
+                                p.form-control-static #{patient.mobile || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-label 性别
+                            .col-sm-10 
+                                p.form-control-static #{patient.gender || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-label 病例
+                            .col-sm-10 
+                                p.form-control-static #{patient.caseReport || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-labelRole
+                            .col-sm-10 
+                                p.form-control-static
+                                    if (patient.roles)
+                                        - each role in patient.roles
+                                            span.label.label-info(data-href='#{adminDir}/role/#{role._id}')
+                                                //- | #{role.name}
+                                                | #{role.name === "Patient" ? "患者" : ""}
+                        //- .form-group
+                        //-     label.col-sm-2.control-label Author
+                        //-     .col-sm-10 
+                        //-         p.form-control-static
+                        //-             if (patient.author)
+                        //-                 | #{patient.author.username}
+                        //-             else
+                        //-                 | Empty
+                        .form-group
+                            label.col-sm-2.control-label 注册日期
+                            .col-sm-10
+                                p.form-control-static #{moment(patient.created).format('LLL')}
+                        .form-group
+                            label.col-sm-2.control-label 最后登录时间
+                            .col-sm-10
+                                p.form-control-static #{moment(patient.last_login_date).format('LLL')}
+                        //- .form-group
+                        //-     label.col-sm-2.control-label Last Login IP
+                        //-     .col-sm-10
+                        //-         p.form-control-static #{patient.last_login_ip}

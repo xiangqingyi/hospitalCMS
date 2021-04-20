@@ -51,6 +51,9 @@ let UserSchema = new Schema({
   physician:{
     type: String
   }, 
+  caseReport: {
+    type: String
+  },
 
   roles: [{
     type: Schema.ObjectId,

@@ -79,17 +79,17 @@ html.no-js
                                         a(href='#{adminDir}/content') 用户列表
                                     li(class=Menu === 'add' ? 'active' : '')
                                         a(href='#{adminDir}/content/add') 新增
-                        if (User && (User.status === 101 || Actions.indexOf('CATEGORY_INDEX') > -1))
-                            li.sub-menu(class=Path === 'category' ? 'active' : '')
+                        if (User && (User.status === 101 || Actions.indexOf('USER_INDEX') > -1))
+                            li.sub-menu(class=Path === 'user' ? 'active' : '')
                                 a(href='javascript:void(0);')
-                                    i.fa.fa-th
-                                    span 患者病案信息管理
+                                    i.fa.fa-users
+                                    span 患者信息管理
                                     i.arrow.fa.fa-angle-right.pull-right
                                 ul
                                     li(class=Menu === 'list' ? 'active' : '')
-                                        a(href='#{adminDir}/category') 患者列表
+                                        a(href='#{adminDir}/patient') 患者列表
                                     li(class=Menu === 'add' ? 'active' : '')
-                                        a(href='#{adminDir}/category/add') 新增
+                                        a(href='#{adminDir}/patient/add') 新增
                         //- if (User && (User.status === 101 || Actions.indexOf('COMMENT_INDEX') > -1))
                         //-     li(class=Path === 'comment' ? 'active' : '')
                         //-         a(href='#{adminDir}/comment') Comment
