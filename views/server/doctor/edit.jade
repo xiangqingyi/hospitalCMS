@@ -66,13 +66,13 @@ block foot-js
                     var status = data.status;
                     if (status) {
                         messenger.update({
-                            message: 'Success',
+                            message: data.message,
                             hideAfter: 3,
                             type: 'success'
                         });
                     } else {
                         messenger.update({
-                            message: 'Failure',
+                            message: data.message,
                             hideAfter: 3,
                             type: 'success'
                         });
@@ -81,7 +81,7 @@ block foot-js
                 err: function() {
                     console.log('error')
                     messenger.update({
-                        message: 'System Error',
+                        message: data.message,
                         hideAfter: 3,
                         type: 'success'
                     });

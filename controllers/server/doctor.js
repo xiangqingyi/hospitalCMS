@@ -364,7 +364,7 @@ exports.edit = async function (req, res) {
                 })
             }
         }
-        obj.roles = roles
+        obj.roles = query
         _.assign(doctor, obj)
 
         try {
@@ -373,13 +373,16 @@ exports.edit = async function (req, res) {
                 req.session.user = doctor
                 req.locals.User = doctor
             }
-            return res.render('server/info', {
-                message: '修改医生个人信息成功'
+       
+            return res.json({
+              status: true,
+              message: '修改成功'
             })
         } catch (error) {
             console.log(error)
-            return res.render('server/info', {
-                message: '修改医生个人信息失败'
+            return res.json({
+              status: false,
+              message: '修改失败'
             })
         }
     }
