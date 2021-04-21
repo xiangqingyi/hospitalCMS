@@ -226,12 +226,12 @@ exports.add = async function (req, res) {
     //let obj = req.body;
     let obj = _.pick(req.body, 'username', 'password', 'email', 'mobile', 'name', 'avatar', 'gender', 'birthday', 'description', 'address', 'position', 'questions', 'tel');
     console.log(obj);
-    if(!(/^1(3|4|5|6|7|8|9)d{9}$/.test(obj.tel))){ 
-      return res.json({
-        status: false,
-        message: "手机号格式错误"
-      })
-  } 
+  //   if(!(/^1(3|4|5|6|7|8|9)d{9}$/.test(obj.tel))){ 
+  //     return res.json({
+  //       status: false,
+  //       message: "手机号格式错误"
+  //     })
+  // } 
 
     Role.findOne({ status: 202 },async  function (err, role) {
       console.log('role', role);
