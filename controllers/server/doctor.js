@@ -107,9 +107,9 @@ exports.list = async function (req, res) {
 */
 exports.one = async function (req, res) {
     let id = req.params.id
-    const results = await Doctor.findById(id).populate('author').populate('roles')
+    const doctor = await User.findById(id).populate('author').populate('roles')
     return res.render('server/doctor/item', {
-        doctor: results
+        doctor: doctor
     })
 }
 

@@ -6,19 +6,19 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 let UserSchema = new Schema({
-  username: {
+  username: {  // 用户名
     type: String,
     required: 'please input username',
     unique: true
   },
 
-  email: {
+  email: {  // 邮箱
     type: String,
     required: 'please input email',
     unique: true
   },
 
-  mobile: {
+  mobile: {   // 手机号
     type: String
   },
 
@@ -138,7 +138,7 @@ UserSchema.path('email').validate(function (email) {
 UserSchema.path("username").validate(function (username) {
   return (
     typeof username === "string" &&
-    username.length >= 4 &&
+    username.length >= 0 &&
     username.length <= 20
   );
 }, "User name must be 4-20 character");

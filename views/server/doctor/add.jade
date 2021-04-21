@@ -29,6 +29,16 @@ block content
                             .col-sm-10
                                 input#inputPassword6.form-control(type='number', name='mobile', placeholder='')
                         .form-group
+                            label.col-sm-2.control-label(for='inputPassword8') 性别
+                            .col-sm-10
+                                select.form-control.input-sm(multiple, name='gender')
+                                   option(value="男")
+                                      | 男
+                                   option(value="女")
+                                      | 女
+                                   option(value="保密")  
+                                      | 保密
+                        .form-group
                             label.col-sm-2.control-label(for='inputPassword7') 科室
                             .col-sm-10
                                 input#inputPassword6.form-control(type='text', name='address', placeholder='')

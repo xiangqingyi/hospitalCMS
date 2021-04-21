@@ -1,0 +1,67 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .panel.panel-default
+                .panel-heading
+                    | 病人详情
+                .panel-body
+                    .form-horizontal
+                        .form-group
+                            label.col-sm-2.control-label 医生编号
+                            .col-sm-10 
+                                p.form-control-static #{doctor.id}
+                        .form-group
+                            label.col-sm-2.control-label 姓名
+                            .col-sm-10 
+                                p.form-control-static #{doctor.name}
+                        //- .form-group
+                        //-     label.col-sm-2.control-label Username
+                        //-     .col-sm-10 
+                        //-         p.form-control-static #{patient.username}
+                        .form-group
+                            label.col-sm-2.control-label 邮箱
+                            .col-sm-10 
+                                p.form-control-static #{doctor.email}
+                        .form-group
+                            label.col-sm-2.control-label 手机
+                            .col-sm-10 
+                                p.form-control-static #{doctor.mobile || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-label 性别
+                            .col-sm-10 
+                                p.form-control-static #{doctor.gender || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-label 科室
+                            .col-sm-10 
+                                p.form-control-static #{doctor.address || 'Empty'}
+                        .form-group
+                            label.col-sm-2.control-labelRole
+                            .col-sm-10 
+                                p.form-control-static
+                                    if (doctor .roles)
+                                        - each role in doctor.roles
+                                            span.label.label-info(data-href='#{adminDir}/role/#{role._id}')
+                                                //- | #{role.name}
+                                                | #{role.name === "Doctor" ? "医生" : ""}
+                        //- .form-group
+                        //-     label.col-sm-2.control-label Author
+                        //-     .col-sm-10 
+                        //-         p.form-control-static
+                        //-             if (patient.author)
+                        //-                 | #{patient.author.username}
+                        //-             else
+                        //-                 | Empty
+                        .form-group
+                            label.col-sm-2.control-label 注册日期
+                            .col-sm-10
+                                p.form-control-static #{moment(doctor).created).format('LLL')}
+                        .form-group
+                            label.col-sm-2.control-label 最后登录时间
+                            .col-sm-10
+                                p.form-control-static #{moment(doctor.last_login_date).format('LLL')}
+                        //- .form-group
+                        //-     label.col-sm-2.control-label Last Login IP
+                        //-     .col-sm-10
+                        //-         p.form-control-static #{patient.last_login_ip}

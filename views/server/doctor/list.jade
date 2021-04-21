@@ -10,7 +10,7 @@ block content
                         tr
                             th 用户名
                             th 姓名
-                            th 角色
+                            th 性别
                             th 科室
                             th 创建人
                             th 日期
@@ -21,12 +21,7 @@ block content
                                 td 
                                     a(href='#{adminDir}/doctor/#{user.id}', title='#{user.email}') #{user.username}
                                 td #{user.name}
-                                td
-                                    if (user.roles)
-                                        - each role in user.roles
-                                            span.label.label-info
-                                                | #{role.name}
-                                            | 
+                                td #{user.gender}
                                 td #{user.address}
                                 td
                                     if (user.author)
