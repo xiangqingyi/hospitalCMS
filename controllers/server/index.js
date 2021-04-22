@@ -32,7 +32,7 @@ exports.index = function (req, res) {
   ]).then((result) => {
     //console.log(result)
     res.render('server/index', {
-      title: 'Admin Dashboard',
+      title: '主页',
       data: {
         content: result[0],
         category: result[1],
