@@ -23,15 +23,15 @@ router.use(function (req, res, next) {
 
 router.all('/query').all(patient.authenticate, patient.query)
 
-router.route('/').get(action.checkAction('USER_INDEX'), patient.list);
+router.route('/').get(action.checkAction('COMMENT_INDEX'), patient.list);
 
-router.route('/add').all(action.checkAction('USER_CREATE'), patient.add);
+router.route('/add').all(action.checkAction('COMMENT_CREATE'), patient.add);
 
-router.route('/:id').get(action.checkAction('USER_DETAIL'), patient.one);
+router.route('/:id').get(action.checkAction('COMMENT_DETAIL'), patient.one);
 
-router.route('/:id/edit').all(action.checkAction('USER_UPDATE'), patient.edit);
+router.route('/:id/edit').all(action.checkAction('COMMENT_DETAIL'), patient.edit);
 
-router.route('/:id/del').post(action.checkAction('USER_DELETE'), patient.del);
+router.route('/:id/del').post(action.checkAction('COMMENT_DELETE'), patient.del);
 
 module.exports = function (app) {
   let path = util.translateAdminDir('/patient');
