@@ -34,6 +34,10 @@ let UserSchema = new Schema({
     type: String,
     enum: ['男', '女', '保密']
   },
+  bed_room: {
+    type: Schema.ObjectId,
+    ref: 'ward'
+  },
 
   birthday: {
     type: Date,
@@ -59,6 +63,14 @@ let UserSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Role'
   }],
+  enterDate: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  outDate: {
+      type: Date
+  },
 
   last_login_date: Date,
 
