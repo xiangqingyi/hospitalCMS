@@ -1,0 +1,66 @@
+extends ../layout
+
+block content
+    .row
+        .col-md-12
+            .lists
+                a.btn.btn-info(href='#{adminDir}/ward/add') 新增
+                table.table.table-striped
+                    thead
+                        tr
+                            th 病房号
+                            th 病房信息
+                            th 日期
+                            th 操作
+                    tbody
+                        - each room in rooms
+                            tr
+                                td 
+                                    a(href='#{adminDir}/ward/#{room.id}', title='#{room.bed_roomNo}') #{room.bed_roomNo}
+                                td #{room.bed_roomInfo}
+                                td #{moment(room.created).format('LLL')}
+                                td
+                                    a.btn.btn-default.btn-xs(href='#{adminDir}/ward/#{room.id}/edit') edit
+                                    |  
+                                    a.btn.btn-danger.btn-xs.J_del(href='#{adminDir}/ward/#{room.id}/del') delete
+                if (pageInfo && pageInfo.totalPage > 1)
+                    - pageInfo.query = query
+                    include ../mixin
+                    +pagination(pageInfo)
+
+block foot-js
+    script.
+        var token = '#{token}';
+        Messenger.options = {
+            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+            theme: 'flat'
+        };
+        $(function() {
+            $(document).on('click', '.J_del', function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                var url = $this.attr('href');
+                var messenger = Messenger().post("Processing...");
+                $.post(url, {_csrf: token}, function(res) {
+                    console.log(res);
+                    var status = res.status;
+                    if (status) {
+                        messenger.update({
+                            message: 'Success',
+                            hideAfter: 3,
+                            type: 'success'
+                        });
+                        setTimeout(function() {
+                            $this.closest('tr').remove();
+                        }, 1000)
+                        
+                    } else {
+                        messenger.update({
+                            message: 'Failure',
+                            hideAfter: 3,
+                            type: 'error'
+                        });
+                    }
+                })
+            })
+        })

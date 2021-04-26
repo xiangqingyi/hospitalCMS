@@ -68,17 +68,17 @@ html.no-js
                             a(href='#{adminDir}')
                                 i.fa.fa-dashboard
                                 span 主页
-                        //- if (User && (User.status === 101 || Actions.indexOf('CONTENT_INDEX') > -1))
-                        //-     li.sub-menu(class=Path === 'content' ? 'active' : '')
-                        //-         a(href='javascript:void(0);')
-                        //-             i.fa.fa-file-text
-                        //-             span 系统用户管理
-                        //-             i.arrow.fa.fa-angle-right.pull-right
-                        //-         ul
-                        //-             li(class=Menu === 'list' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/content') 用户列表
-                        //-             li(class=Menu === 'add' ? 'active' : '')
-                        //-                 a(href='#{adminDir}/content/add') 新增
+                        if (User && (User.status === 101 || Actions.indexOf('CONTENT_INDEX') > -1))
+                            li.sub-menu(class=Path === 'ward' ? 'active' : '')
+                                a(href='javascript:void(0);')
+                                    i.fa.fa-file-text
+                                    span 病房信息管理
+                                    i.arrow.fa.fa-angle-right.pull-right
+                                ul
+                                    li(class=Menu === 'list' ? 'active' : '')
+                                        a(href='#{adminDir}/ward') 病房列表
+                                    li(class=Menu === 'add' ? 'active' : '')
+                                        a(href='#{adminDir}/ward/add') 新增
                         if (User && (User.status === 101 || Actions.indexOf('COMMENT_INDEX') > -1))
                             li.sub-menu(class=Path === 'user' ? 'active' : '')
                                 a(href='javascript:void(0);')

@@ -1,194 +1,121 @@
 'use strict';
 
 let mongoose = require('mongoose')
-let Content = mongoose.model('Content')
-let Category = mongoose.model('Category')
-let Tag = mongoose.model('Tag')
 let _ = require('lodash')
 let util = require('../../lib/util')
+let Ward = mongoose.model('Ward')
 
-exports.list = function (req, res) {
-  let condition = {};
-  let category = req.query.category;
-  if (category) {
-    condition.category = category;
-  }
-  const isAdmin = req.isAdmin;
-  if (!isAdmin) {
-    condition.author = req.session.user._id;
-  }
-  
-  Content.count(condition).exec().then(function (total) {
-    let query = Content.find(condition).populate('author', 'username name email');
-    let pageInfo = util.createPage(req.query.page, total);
-    //console.log(pageInfo);
-    query.skip(pageInfo.start);
-    query.limit(pageInfo.pageSize);
-    query.sort({ created: -1 });
-    query.exec(function (err, results) {
-      //console.log(err, results);
-      res.render('server/content/list', {
-        title: '用户列表',
-        contents: results,
-        pageInfo: pageInfo,
-        Menu: 'list'
-      });
-    });
-  });
-};
 
-exports.add = function (req, res) {
+exports.list =  async function(req, res) {
+    let condition = {}
+    try {
+        const isAdmin = req.isAdmin
+        let count = await Ward.count(condition)
+        let results =  await Ward.find(condition).populate('bed_room_persons')
+        let pageInfo = util.createPage(req.query.page, count)
+        return res.render('server/ward/list', {
+            title: "病房列表",
+            rooms: results,
+            pageInfo: pageInfo
+        })
+    } catch (error) {
+        console.log(error)
+        return res.render('server/info', {
+            message: "获取病房列表失败"
+        })
+    }
+}
+
+exports.add = async function (req, res) {
   if (req.method === 'GET') {
     let condition = {};
     const isAdmin = req.isAdmin;
     if (!isAdmin) {
       condition.author = req.session.user._id;
     }
-    Promise.all([Category.find(condition).exec(), Tag.find(condition).exec()]).then((result) => {
-      res.render('server/content/add', {
-        categorys: result[0],
-        tags: result[1],
-        Menu: 'add'
-      });
-    }).catch((e) => {
-      res.render('server/content/add', {
-        Menu: 'add'
-      });
-    })
-  } else if (req.method === 'POST') {
-    let obj = _.pick(req.body, 'title', 'summary', 'content', 'gallery', 'category', 'tags');
-    if (req.session.user) {
-      obj.author = req.session.user._id;
-    }
-    if (obj.category === '') {
-      obj.category = null;
-    }
-
-    let content = new Content(obj);
-    content.save(function (err, content) {
-      if (req.xhr) {
-        return res.json({
-          status: !err
+    try {
+        return res.render('server/ward/add', {
+            Menu: 'add'
         })
-      }
-      if (err) {
-        console.log(err);
+    } catch (error) {
+        console.log('error')
         return res.render('server/info', {
-          message: 'Failure'
-        });
-      }
-
-      res.render('server/info', {
-        message: 'Success'
-      });
-    });
-  }
-};
-exports.edit = function (req, res) {
-  if (req.method === 'GET') {
-    let id = req.params.id;
-    Content.findById(id).populate('author gallery tags').exec(function (err, result) {
-      if (err) {
-        console.log('Failure');
-      }
-      let isAdmin = req.isAdmin;
-      let isAuthor = result.author && ((result.author._id + '') === req.session.user._id);
-
-      if (!isAdmin && !isAuthor) {
-        return res.render('server/info', {
-          message: 'no permission'
-        });
-      }
-      let condition = {};
-      if (!isAdmin) {
-        condition.author = req.session.user._id;
-      }
-      Category.find(condition, function (err, categorys) {
-        Tag.find(condition).exec().then(function (tags) {
-          //console.log(tags)
-          res.render('server/content/edit', {
-            content: result,
-            categorys: categorys,
-            tags: tags,
-            Menu: 'edit'
-          });
-        });
-
-      });
-    });
+            message: "获取新增病房页面失败"
+        })
+    }
   } else if (req.method === 'POST') {
-    let id = req.params.id;
-    let obj = _.pick(req.body, 'title', 'summary', 'content', 'gallery', 'category', 'tags');
-    console.log(obj);
-    console.log(obj.gallery)
-    if (obj.category === '') {
-      obj.category = null;
+    let obj = _.pick(req.body, 'bed_roomNo', 'bed_roomInfo', "beds");
+    try {
+        let ward = new Ward(obj)
+        await ward.save()
+        return res.json({
+            status: true,
+            message: "新增病房失败"
+        })  
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            status: false,
+            message: "新增病房失败"
+        })
     }
-    if (!obj.gallery) {
-      obj.gallery = [];
-    }
-
-    Content.findById(id).populate('author').exec(function (err, result) {
-      //console.log(result);
-      let isAdmin = req.isAdmin;
-      let isAuthor = result.author && ((result.author._id + '') === req.session.user._id);
-
-      if (!isAdmin && !isAuthor) {
-        return res.render('server/info', {
-          message: 'no permission'
-        });
-      }
-      _.assign(result, obj);
-      result.save(function (err, content) {
-        if (req.xhr) {
-          return res.json({
-            status: !err
-          })
-        }
-        if (err || !content) {
-          return res.render('server/info', {
-            message: 'Failure'
-          });
-        }
-        res.render('server/info', {
-          message: 'Success'
-        });
-      });
-    });
   }
 };
-
-exports.del = function (req, res) {
-  let id = req.params.id;
-  Content.findById(id).populate('author').exec(function (err, result) {
-    if (err || !result) {
-      return res.render('server/info', {
-        message: 'Not Exist'
-      });
-    }
-    let isAdmin = req.isAdmin;
-    let isAuthor = result.author && ((result.author._id + '') === req.session.user._id);
-
-    if (!isAdmin && !isAuthor) {
-      return res.render('server/info', {
-        message: 'no permission'
-      });
-    }
-    //
-    result.remove(function (err) {
-      if (req.xhr) {
-        return res.json({
-          status: !err
-        });
-      }
-      if (err) {
+exports.one = async function (req, res) {
+    let id = req.params.id
+    try {
+        let wardInfo = await Ward.findById(id).populate('bed_room_persons')
+        return res.render('server/ward/item', {
+            ward: wardInfo
+        })
+    } catch (error) {
+        console.log('one ward', error)
         return res.render('server/info', {
-          message: 'Failure'
-        });
+            message: '获取病房信息失败'
+        })
+    }
+}
+
+exports.edit = async function (req, res) {
+    let id = req.params.id
+    let room = await Ward.findById(id).populate('bed_room_persons')
+    if (req.method === "GET") {
+        return res.json({
+            Menu: 'edit',
+            result: room
+        })
+    } else if (req.method === "POST") {
+       let obj = _.pick(req.body, 'bed_roomNo', 'bed_roomInfo');
+       _.assign(room, obj)
+       await room.save()
+       return res.json({
+           message: "修改病房信息成功",
+           status: true
+       })
+    }
+}
+
+
+exports.del = async function (req, res) {
+  let id = req.params.id;
+  try {
+      let room = await Ward.findById(id)
+      if (!room) {
+          return res.json({
+              status: false,
+              message: "改病房不存在"
+          })
       }
-      res.render('server/info', {
-        message: 'Success'
+      await room.remove()
+      return res.json({
+          status: true,
+          message: "删除病房成功"
       })
-    });
-  });
+  } catch (error) {
+      return res.json({
+          status: false,
+          message: "删除病房失败"
+      })
+  }
+
 };

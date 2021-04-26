@@ -11,18 +11,18 @@ let WardSchema = new Schema({
   bed_roomInfo: {
     type: String
   },
+  beds: {
+      type: Object  // bedNo: 1, bedName: 1号床
+  },
   bed_room_persons: [{
     type: Schema.ObjectId,
     ref: 'User'
   }],
-  doctor: {
-    type: Schema.ObjectId,
-    ref: "User",
-  },
-  status: {
-    type: Number,
-    default: 0,   // 0: 没出院，1：已经出院
+  created: {
+      type: Date,
+      default: Date.now
   }
+
 });
 
 WardSchema.methods = {

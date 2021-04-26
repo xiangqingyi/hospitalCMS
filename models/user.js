@@ -11,7 +11,14 @@ let UserSchema = new Schema({
     required: 'please input username',
     unique: true
   },
-
+  wardPersonStatus: {
+    type: Number,
+    default: 0,   // 0: 没出院，1：已经出院
+  },
+  doctor: {
+    type: Schema.ObjectId,
+    ref: "User"
+  },
   email: {  // 邮箱
     type: String,
     required: 'please input email',
