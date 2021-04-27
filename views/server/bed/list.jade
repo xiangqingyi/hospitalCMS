@@ -4,27 +4,27 @@ block content
     .row
         .col-md-12
             .lists
-                a.btn.btn-info(href='#{adminDir}/ward/add') 新增
+                a.btn.btn-info(href='#{adminDir}/bed/add') 新增
                 table.table.table-striped
                     thead
                         tr
-                            th 病房号
-                            th 病房信息
-                            th 病床数
+                            th 所属病房
+                            th 所属病人
+                            th 对应医生
                             th 日期
-                            th 操作
+                            //- th 操作
                     tbody
-                        - each room in rooms
+                        - each bed in rooms
                             tr
-                                td 
-                                    a(href='#{adminDir}/ward/#{room.id}', title='#{room.bed_roomNo}') #{room.bed_roomNo}
-                                td #{room.bed_roomInfo}
-                                td #{room.beds}
-                                td #{moment(room.created).format('LLL')}
-                                td
-                                    a.btn.btn-default.btn-xs(href='#{adminDir}/ward/#{room.id}/edit') edit
-                                    |  
-                                    a.btn.btn-danger.btn-xs.J_del(href='#{adminDir}/ward/#{room.id}/del') delete
+                                td #{bed.room.bed_roomNo}
+                                td #{bed.paitent.name}
+                                td #{bed.doctor.name}
+                                td #{moment(bed.created).format('LLL')}
+                                //- td 
+                                //-     a.btn.btn-default.btn-xs(href='#{adminDir}/user/#{user.id}/edit') edit
+                                //-     |  
+                                //-     if (user.status !== 101)
+                                //-         a.btn.btn-danger.btn-xs.J_del(href='#{adminDir}/user/#{user.id}/del') delete
                 if (pageInfo && pageInfo.totalPage > 1)
                     - pageInfo.query = query
                     include ../mixin

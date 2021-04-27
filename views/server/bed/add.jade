@@ -5,22 +5,28 @@ block content
         .col-md-6(style="width:100%")
             .panel.panel-default
                 .panel-heading
-                    h3.panel-title 新增病房
+                    h3.panel-title  病床分配
                 .panel-body
                     form.form-horizontal(role='form', action='', method='post')
                         .form-group
-                            label.col-sm-2.control-label(for='inputEmail2') 病房ID
-                            .col-sm-10
-                                input#inputEmail2.form-control(type='text', name='bed_roomNo', placeholder='')
+                            labelRole 病人
+                            select.form-control.input-sm(name='paitent')
+                                - each patient in patients
+                                       option(value='#{patient.id}')
+                                            | #{patient.name}
                         .form-group
-                            label.col-sm-2.control-label(for='inputPassword3') 病房信息
-                            .col-sm-10
-                                input#inputPassword3.form-control(type='text', name='bed_roomInfo', placeholder='')
+                            labelRole 病房
+                            select.form-control.input-sm(multiple, name='room')
+                                - each room in rooms
+                                       option(value='#{room.id}')
+                                            | #{room.bed_roomNo}
                         .form-group
-                            label.col-sm-2.control-label(for='inputPassword4') 病床数
-                            .col-sm-10
-                                input#inputPassword4.form-control(type='text', name='beds', placeholder='')
-        
+                            labelRole 医生
+                            select.form-control.input-sm(multiple, name='doctor')
+                                - each doctor in doctors
+                                       option(value='#{doctor.id}')
+                                            | #{doctor.name}
+
                         input(type='hidden', name='_csrf', value='#{token}')
                         .form-group
                             .col-sm-offset-2.col-sm-10(style="width:100%;  margin-left:0;text-align:center;")

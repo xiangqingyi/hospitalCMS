@@ -79,6 +79,17 @@ html.no-js
                                         a(href='#{adminDir}/ward') 病房列表
                                     li(class=Menu === 'add' ? 'active' : '')
                                         a(href='#{adminDir}/ward/add') 新增
+                        if (User && (User.status === 101 || Actions.indexOf('CONTENT_INDEX') > -1))
+                            li.sub-menu(class=Path === 'bed' ? 'active' : '')
+                                a(href='javascript:void(0);')
+                                    i.fa.fa-file-text
+                                    span 病床信息管理
+                                    i.arrow.fa.fa-angle-right.pull-right
+                                ul
+                                    li(class=Menu === 'list' ? 'active' : '')
+                                        a(href='#{adminDir}/bed') 病床列表
+                                    li(class=Menu === 'add' ? 'active' : '')
+                                        a(href='#{adminDir}/bed/add') 分配病床
                         if (User && (User.status === 101 || Actions.indexOf('COMMENT_INDEX') > -1))
                             li.sub-menu(class=Path === 'user' ? 'active' : '')
                                 a(href='javascript:void(0);')
